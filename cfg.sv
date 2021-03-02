@@ -1,7 +1,13 @@
 class SubCfg;
-    string      attr3[int];
-    string      attr4[int];
-    int         attr5[string];
+    int             int_list[int];
+    int             index_int_list_0;
+    string          str_list[int];
+    int             index_str_list_0;
+    string          str_dict[int];
+    int             index_str_dict_0;
+    int             array_array[int][int];
+    int             index_array_array_0;
+    int             index_array_array_1;
 
     function new();
     endfunction: new
@@ -9,6 +15,8 @@ class SubCfg;
     function load_value(string path, string hierarchy = "SubCfg");
         int     f, fp;
         string  content, line, attr_name, value;
+        string  tmp;
+        int     len;
 
         f = $fopen(path, "r");
         do begin
@@ -21,22 +29,42 @@ class SubCfg;
                     content = {content, line.getc(i)};
                 end
             end
-            $sscanf(content, $sformatf("%s.attr3[0]=%%s", hierarchy), attr3[0]);
-            $sscanf(content, $sformatf("%s.attr3[1]=%%s", hierarchy), attr3[1]);
-            $sscanf(content, $sformatf("%s.attr4[4]=%%s", hierarchy), attr4[4]);
-            $sscanf(content, $sformatf("%s.attr4[5]=%%s", hierarchy), attr4[5]);
-            $sscanf(content, $sformatf("%s.attr5[\"6\"]=%%d", hierarchy), attr5["6"]);
-            $sscanf(content, $sformatf("%s.attr5[\"7\"]=%%d", hierarchy), attr5["7"]);
+            if ($sscanf(content, $sformatf("%s.int_list[%%d]=%%d", hierarchy), index_int_list_0, int_list[index_int_list_0])) continue;
+            if ($sscanf(content, $sformatf("%s.int_list[%%d]=%%d", hierarchy), index_int_list_0, int_list[index_int_list_0])) continue;
+            if ($sscanf(content, $sformatf("%s.[0]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[0]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [0]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[1]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[1]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [1]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[4]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[4]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [4]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[5]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[5]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [5]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
         end while (fp);
     endfunction
 endclass: SubCfg
 
 class Cfg;
-    int         attr0;
-    string      attr1;
-    real        attr2;
-    SubCfg      subcfg;
-    SubCfg      subcfg_array[int];
+    int             v_int;
+    string          v_str;
+    real            v_real;
+    SubCfg          subcfg;
+    int             index_subcfg_array_0;
 
     function new();
         subcfg = new();
@@ -47,6 +75,8 @@ class Cfg;
     function load_value(string path, string hierarchy = "Cfg");
         int     f, fp;
         string  content, line, attr_name, value;
+        string  tmp;
+        int     len;
 
         f = $fopen(path, "r");
         do begin
@@ -59,12 +89,90 @@ class Cfg;
                     content = {content, line.getc(i)};
                 end
             end
-            $sscanf(content, $sformatf("%s.attr0=%%d", hierarchy), attr0);
-            $sscanf(content, $sformatf("%s.attr1=%%s", hierarchy), attr1);
-            $sscanf(content, $sformatf("%s.attr2=%%f", hierarchy), attr2);
-            subcfg.load_value(path, "cfg.subcfg");
-            subcfg_array[0].load_value(path, "cfg.subcfg_array[0]");
-            subcfg_array[1].load_value(path, "cfg.subcfg_array[1]");
+            if ($sscanf(content, $sformatf("%s.cfg.v_str=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.cfg.v_str=$$%%d$$\"%%%0ds\"", hierarchy, len, len), v_str) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.cfg.v_real=%%f", hierarchy), v_real)) continue;
+            if ($sscanf(content, $sformatf("%s.int_list[%%d]=%%d", hierarchy), index_int_list_0, int_list[index_int_list_0])) continue;
+            if ($sscanf(content, $sformatf("%s.int_list[%%d]=%%d", hierarchy), index_int_list_0, int_list[index_int_list_0])) continue;
+            if ($sscanf(content, $sformatf("%s.[0]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[0]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [0]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[1]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[1]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [1]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[4]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[4]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [4]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[5]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[5]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [5]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.int_list[%%d]=%%d", hierarchy), index_int_list_0, int_list[index_int_list_0])) continue;
+            if ($sscanf(content, $sformatf("%s.int_list[%%d]=%%d", hierarchy), index_int_list_0, int_list[index_int_list_0])) continue;
+            if ($sscanf(content, $sformatf("%s.[0]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[0]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [0]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[1]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[1]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [1]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[4]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[4]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [4]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[5]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[5]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [5]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.int_list[%%d]=%%d", hierarchy), index_int_list_0, int_list[index_int_list_0])) continue;
+            if ($sscanf(content, $sformatf("%s.int_list[%%d]=%%d", hierarchy), index_int_list_0, int_list[index_int_list_0])) continue;
+            if ($sscanf(content, $sformatf("%s.[0]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[0]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [0]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[1]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[1]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [1]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[4]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[4]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [4]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.[5]=$$%%d$$%%s", hierarchy), len, tmp)); begin
+                if ($sscanf(content, $sformatf("%s.[5]=$$%%d$$\"%%%0ds\"", hierarchy, len, len), [5]) begin;
+                    continue;
+                end
+            end
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
+            if ($sscanf(content, $sformatf("%s.array_array[%%d][%%d]=%%d", hierarchy), index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1])) continue;
         end while (fp);
     endfunction
 endclass: Cfg
