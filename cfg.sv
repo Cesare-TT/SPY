@@ -51,7 +51,23 @@ class SubCfg;
             end
         end while (fp);
         $fclose(f);
-    endfunction
+    endfunction: load_value
+    
+    function print_value(string hierarchy = "SubCfg");
+        foreach (int_list[index_int_list_0])
+            $display("%s.int_list[%0d] = %0d", hierarchy, index_int_list_0, int_list[index_int_list_0]);
+        foreach (str_list[index_str_list_0])
+            $display("%s.str_list[%0d] = %0s", hierarchy, index_str_list_0, str_list[index_str_list_0]);
+        foreach (str_dict[index_str_dict_0])
+            $display("%s.str_dict[%0d] = %0s", hierarchy, index_str_dict_0, str_dict[index_str_dict_0]);
+        foreach (array_array[index_array_array_0])
+            foreach (array_array[index_array_array_0][index_array_array_1])
+                $display("%s.array_array[%0d][%0d] = %0d", hierarchy, index_array_array_0, index_array_array_1, array_array[index_array_array_0][index_array_array_1]);
+        foreach (str_array_array[index_str_array_array_0])
+            foreach (str_array_array[index_str_array_array_0][index_str_array_array_1])
+                $display("%s.str_array_array[%0d][%0d] = %0s", hierarchy, index_str_array_array_0, index_str_array_array_1, str_array_array[index_str_array_array_0][index_str_array_array_1]);
+    endfunction: print_value
+    
 endclass: SubCfg
 
 class Cfg;
@@ -105,6 +121,17 @@ class Cfg;
         subcfg.load_value(path, "cfg.subcfg");
         foreach (subcfg_array[index_subcfg_array_0])
             foreach (subcfg_array[index_subcfg_array_0][index_subcfg_array_1])
-                subcfg_array[index_subcfg_array_0][index_subcfg_array_1].load_value(path, $sformatf("%s.subcfg_array[%d][%d]", hierarchy, index_subcfg_array_0, index_subcfg_array_1));
-    endfunction
+                subcfg_array[index_subcfg_array_0][index_subcfg_array_1].load_value(path, $sformatf("%s.subcfg_array[%0d][%0d]", hierarchy, index_subcfg_array_0, index_subcfg_array_1));
+    endfunction: load_value
+    
+    function print_value(string hierarchy = "Cfg");
+        $display("%s.v_int = %0d", hierarchy, v_int);
+        $display("%s.v_str = \"%0s\"", hierarchy, v_str);
+        $display("%s.v_real = %0f", hierarchy, v_real);
+        subcfg.print_value("cfg.subcfg");
+        foreach (subcfg_array[index_subcfg_array_0])
+            foreach (subcfg_array[index_subcfg_array_0][index_subcfg_array_1])
+                subcfg_array[index_subcfg_array_0][index_subcfg_array_1].print_value($sformatf("%s.subcfg_array[%0d][%0d]", hierarchy, index_subcfg_array_0, index_subcfg_array_1));
+    endfunction: print_value
+    
 endclass: Cfg

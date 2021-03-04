@@ -47,19 +47,17 @@ class sv_type(object):
         relative_name.append(node.name)
         relative_name.reverse()
         return ''.join(relative_name)
-        # if isinstance(inst, sv_type):
-        #     return self.get_full_name().replace(f'{inst.get_full_name()}.', '')
-        # else:
-        #     raise TypeError('inst should be sv_type or extend from sv_type!')
 
     def get_sv_type(self):
         return None
 
-    def get_sv_string_field(self, inst):
-        if inst == 'int':
+    def get_sv_string_field(self, inst_type):
+        if inst_type == 'int':
             return r'%d'
-        elif inst == 'real':
+        elif inst_type == 'real':
             return r'%f'
+        elif inst_type == 'string':
+            return r'%s'
 
     def render_instantiate(self, root=None, inst=None):
         return None
@@ -81,6 +79,25 @@ class sv_type(object):
 
     def render_load_value(self, root=None, inst=None):
         return None
+    
+    def render_print_value(self, root=None, inst=None):
+        if isinstance(inst, (SvtPyVif,)):
+            quote = r'\"' if isinstance(self, sv_str) else ''
+            return ['$display("%s.{} = {}{}{}", hierarchy, {});'.format(self.get_relative_name(inst).replace('"', r'\"'), quote, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), quote, self.name)]
+        elif isinstance(inst, (sv_array,)):
+            attr_name = inst.get_relative_name(root).replace('"', r'\"')
+            key_filed = inst.get_key_field()
+            scan_string_index = ''.join(f'[{i.replace("%", "%0")}]' for i in key_filed)
+            string_index = ''.join(f'[{i}]' for i in inst.sv_index_list)
+            content = list()
+            load_content = '$display("%s.{}{} = {}", hierarchy, {}, {}{});'.format(attr_name, scan_string_index, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), ', '.join(inst.sv_index_list), attr_name, string_index)
+            intent = ''
+            for index in [f'[{i}]' for i in inst.sv_index_list]:
+                content.append(f'{intent}foreach ({attr_name}{index})')
+                intent = f'    {intent}'
+                attr_name = f'{attr_name}{index}'
+            content.append(f'{intent}{load_content}')
+            return content
 
 class sv_int(sv_type):
     def __init__(self, value=None, name='') -> None:
@@ -158,7 +175,8 @@ class sv_array(sv_type):
     def __init__(self, value=None, name='') -> None:
         super().__init__(value=value, name=name)
         if not isinstance(value,(list,tuple,dict)): raise TypeError('value of sv_array must be list or dict or tuple!')
-        self.value = dict()
+        # self.value = dict()
+        object.__setattr__(self, 'value', dict())
         object.__setattr__(self, 'sv_index_list', list())
 
         # TODO type check to do
@@ -217,7 +235,7 @@ class sv_array(sv_type):
         render_content = list()
         if inst is None:
             for k, v in self.value.items():
-                if isinstance(v, (sv_int, sv_real, sv_str)):
+                if isinstance(v, (sv_int, sv_real, sv_str, SvtPyVif)):
                     render_content.append('{:<12s}    {}[{}];'.format(v.get_sv_type(), self.name, k.get_sv_type()))
                 elif isinstance(v, (sv_array,)):
                     render_content.extend(v.render_declare(sv_name=f'{self.name}[{k.get_sv_type()}]', inst=self))
@@ -264,6 +282,16 @@ class sv_array(sv_type):
         render_content = list()
         for k, v in self.value.items():
             content = v.render_load_value(root, inst)
+            if content:
+                render_content.extend(content)
+            return render_content
+
+    def render_print_value(self, root=None, inst=None):
+        if not isinstance(inst, sv_array):
+            inst = self
+        render_content = list()
+        for k, v in self.value.items():
+            content = v.render_print_value(root, inst)
             if content:
                 render_content.extend(content)
             return render_content
@@ -354,7 +382,7 @@ class SvtPyVif(sv_type):
             elif isinstance(inst, (sv_array,)):
                 attr_name = inst.get_relative_name(root).replace('"', r'\"')
                 key_filed = inst.get_key_field()
-                scan_string_index = ''.join(f'[{i}]' for i in key_filed)
+                scan_string_index = ''.join(f'[{i.replace("%", "%0")}]' for i in key_filed)
                 string_index = ''.join(f'[{i}]' for i in inst.sv_index_list)
                 content = list()
                 load_content = '{}{}.load_value(path, $sformatf("%s.{}{}", hierarchy, {}));'.format(attr_name, string_index, attr_name, scan_string_index, ', '.join(inst.sv_index_list))
@@ -367,6 +395,34 @@ class SvtPyVif(sv_type):
                 return content
         for var in self.var_dict.values():
             content = var.render_load_value(root, inst)
+            if content:
+                render_content.extend(content)
+        return render_content
+
+    def render_print_value(self, root=None, inst=None):
+        render_content = list()
+        if root is None:
+            root = self
+            inst = self
+        else:
+            if isinstance(inst, (SvtPyVif,)):
+                return [f'{self.get_relative_name(root)}.print_value("{self.get_full_name()}");']
+            elif isinstance(inst, (sv_array,)):
+                attr_name = inst.get_relative_name(root).replace('"', r'\"')
+                key_filed = inst.get_key_field()
+                scan_string_index = ''.join(f'[{i.replace("%", "%0")}]' for i in key_filed)
+                string_index = ''.join(f'[{i}]' for i in inst.sv_index_list)
+                content = list()
+                load_content = '{}{}.print_value($sformatf("%s.{}{}", hierarchy, {}));'.format(attr_name, string_index, attr_name, scan_string_index, ', '.join(inst.sv_index_list))
+                intent = ''
+                for index in [f'[{i}]' for i in inst.sv_index_list]:
+                    content.append(f'{intent}foreach ({attr_name}{index})')
+                    intent = f'    {intent}'
+                    attr_name = f'{attr_name}{index}'
+                content.append(f'{intent}{load_content}')
+                return content
+        for var in self.var_dict.values():
+            content = var.render_print_value(root, inst)
             if content:
                 render_content.extend(content)
         return render_content
@@ -396,14 +452,5 @@ class SvtPyVif(sv_type):
 
     def gen_sv_class(self, file_name):
         f = open(file_name, 'w')
-        f.write('\n\n'.join(reversed(self.render_sv_class().values())))
+        f.write('\n\n'.join(reversed(list(self.render_sv_class().values()))))
         f.close()
-
-if __name__ == '__main__':
-    sv = SvtPyVif()
-    sv.attr0 = 0
-    sv.attr1 = "1"
-    sv.attr2 = [2, 3]
-    sv.attr3 = 0.1
-    sv.get_cfg()
-    sv.gen_cfg('test.cfg')

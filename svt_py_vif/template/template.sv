@@ -37,5 +37,12 @@ class {{sv_class.get_sv_type()}};
         {%- for content in sv_class.render_load_value() %}
         {{content}}
         {%- endfor %}
-    endfunction
+    endfunction: load_value
+    
+    function print_value(string hierarchy = "{{sv_class.get_sv_type()}}");
+        {%- for content in sv_class.render_print_value() %}
+        {{content}}
+        {%- endfor %}
+    endfunction: print_value
+    
 endclass: {{sv_class.get_sv_type()}}
