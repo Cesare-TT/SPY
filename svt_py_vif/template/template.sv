@@ -45,4 +45,18 @@ class {{sv_class.get_sv_type()}};
         {%- endfor %}
     endfunction: print_value
     
+    function output_value(string path, string hierarchy = "{{sv_class.get_sv_type()}}", int f=0);
+        bit f_root;
+
+        if (f == 0) begin
+            f = $fopen(path, "w");
+            f_root = 1;
+        end
+
+        {%- for content in sv_class.render_output_value() %}
+        {{content}}
+        {%- endfor %}
+
+        if (f_root) $fclose(f);
+    endfunction: output_value
 endclass: {{sv_class.get_sv_type()}}

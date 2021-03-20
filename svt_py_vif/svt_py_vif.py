@@ -82,8 +82,7 @@ class sv_type(object):
     
     def render_print_value(self, root=None, inst=None):
         if isinstance(inst, (SvtPyVif,)):
-            quote = r'\"' if isinstance(self, sv_str) else ''
-            return ['$display("%s.{} = {}{}{}", hierarchy, {});'.format(self.get_relative_name(inst).replace('"', r'\"'), quote, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), quote, self.name)]
+            return ['$display("%s.{} = {}", hierarchy, {});'.format(self.get_relative_name(inst).replace('"', r'\"'), self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), self.name)]
         elif isinstance(inst, (sv_array,)):
             attr_name = inst.get_relative_name(root).replace('"', r'\"')
             key_filed = inst.get_key_field()
@@ -91,6 +90,24 @@ class sv_type(object):
             string_index = ''.join(f'[{i}]' for i in inst.sv_index_list)
             content = list()
             load_content = '$display("%s.{}{} = {}", hierarchy, {}, {}{});'.format(attr_name, scan_string_index, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), ', '.join(inst.sv_index_list), attr_name, string_index)
+            intent = ''
+            for index in [f'[{i}]' for i in inst.sv_index_list]:
+                content.append(f'{intent}foreach ({attr_name}{index})')
+                intent = f'    {intent}'
+                attr_name = f'{attr_name}{index}'
+            content.append(f'{intent}{load_content}')
+            return content
+    
+    def render_output_value(self, root=None, inst=None):
+        if isinstance(inst, (SvtPyVif,)):
+            return ['$fdisplay(f, "%s.{}={}", hierarchy, {});'.format(self.get_relative_name(inst).replace('"', r'\"'), self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), self.name)]
+        elif isinstance(inst, (sv_array,)):
+            attr_name = inst.get_relative_name(root).replace('"', r'\"')
+            key_filed = inst.get_key_field()
+            scan_string_index = ''.join(f'[{i.replace("%", "%0")}]' for i in key_filed)
+            string_index = ''.join(f'[{i}]' for i in inst.sv_index_list)
+            content = list()
+            load_content = '$fdisplay(f, "%s.{}{}={}", hierarchy, {}, {}{});'.format( attr_name, scan_string_index, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), ', '.join(inst.sv_index_list), attr_name, string_index)
             intent = ''
             for index in [f'[{i}]' for i in inst.sv_index_list]:
                 content.append(f'{intent}foreach ({attr_name}{index})')
@@ -170,6 +187,49 @@ class sv_str(sv_type):
                     '        continue;',
                     '    end',
                     'end']
+
+    def render_print_value(self, root=None, inst=None):
+        if isinstance(inst, (SvtPyVif,)):
+            quote = r'\"'
+            return ['$display("%s.{} = {}{}{}", hierarchy, {});'.format(self.get_relative_name(inst).replace('"', r'\"'), quote, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), quote, self.name)]
+        elif isinstance(inst, (sv_array,)):
+            attr_name = inst.get_relative_name(root).replace('"', r'\"')
+            key_filed = inst.get_key_field()
+            scan_string_index = ''.join(f'[{i.replace("%", "%0")}]' for i in key_filed)
+            string_index = ''.join(f'[{i}]' for i in inst.sv_index_list)
+            content = list()
+            load_content = '$display("%s.{}{} = {}", hierarchy, {}, {}{});'.format(attr_name, scan_string_index, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), ', '.join(inst.sv_index_list), attr_name, string_index)
+            intent = ''
+            for index in [f'[{i}]' for i in inst.sv_index_list]:
+                content.append(f'{intent}foreach ({attr_name}{index})')
+                intent = f'    {intent}'
+                attr_name = f'{attr_name}{index}'
+            content.append(f'{intent}{load_content}')
+            return content
+
+    def render_output_value(self, root=None, inst=None):
+        quote = r'\"'
+        prefix_str = f'$$%0d$$'
+        if isinstance(inst, (SvtPyVif,)):
+            postfix_str = f'{self.name}.len(),'
+            return ['$fdisplay(f, "%s.{}={}{}{}{}", hierarchy, {} {});'.format(self.get_relative_name(inst).replace('"', r'\"'), prefix_str, quote, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), quote, postfix_str, self.name)]
+        elif isinstance(inst, (sv_array,)):
+            attr_name = inst.get_relative_name(root).replace('"', r'\"')
+            key_filed = inst.get_key_field()
+            scan_string_index = ''.join(f'[{i.replace("%", "%0")}]' for i in key_filed)
+            string_index = ''.join(f'[{i}]' for i in inst.sv_index_list)
+            quote = r'\"'
+            prefix_str = f'$$%0d$$'
+            postfix_str = f'{attr_name}{string_index}.len(),'
+            content = list()
+            load_content = '$fdisplay(f, "%s.{}{}={}{}{}{}", hierarchy, {}, {} {}{});'.format( attr_name, scan_string_index, prefix_str, quote, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), quote, ', '.join(inst.sv_index_list), postfix_str, attr_name, string_index)
+            intent = ''
+            for index in [f'[{i}]' for i in inst.sv_index_list]:
+                content.append(f'{intent}foreach ({attr_name}{index})')
+                intent = f'    {intent}'
+                attr_name = f'{attr_name}{index}'
+            content.append(f'{intent}{load_content}')
+            return content
 
 class sv_array(sv_type):
     def __init__(self, value=None, name='') -> None:
@@ -292,6 +352,16 @@ class sv_array(sv_type):
         render_content = list()
         for k, v in self.value.items():
             content = v.render_print_value(root, inst)
+            if content:
+                render_content.extend(content)
+            return render_content
+
+    def render_output_value(self, root=None, inst=None):
+        if not isinstance(inst, sv_array):
+            inst = self
+        render_content = list()
+        for k, v in self.value.items():
+            content = v.render_output_value(root, inst)
             if content:
                 render_content.extend(content)
             return render_content
@@ -423,6 +493,34 @@ class SvtPyVif(sv_type):
                 return content
         for var in self.var_dict.values():
             content = var.render_print_value(root, inst)
+            if content:
+                render_content.extend(content)
+        return render_content
+    
+    def render_output_value(self, root=None, inst=None):
+        render_content = list()
+        if root is None:
+            root = self
+            inst = self
+        else:
+            if isinstance(inst, (SvtPyVif,)):
+                return [f'{self.get_relative_name(root)}.output_value(path, "{self.get_full_name()}", f);']
+            elif isinstance(inst, (sv_array,)):
+                attr_name = inst.get_relative_name(root).replace('"', r'\"')
+                key_filed = inst.get_key_field()
+                scan_string_index = ''.join(f'[{i.replace("%", "%0")}]' for i in key_filed)
+                string_index = ''.join(f'[{i}]' for i in inst.sv_index_list)
+                content = list()
+                load_content = '{}{}.output_value(path, $sformatf("%s.{}{}", hierarchy, {}), f);'.format(attr_name, string_index, attr_name, scan_string_index, ', '.join(inst.sv_index_list))
+                intent = ''
+                for index in [f'[{i}]' for i in inst.sv_index_list]:
+                    content.append(f'{intent}foreach ({attr_name}{index})')
+                    intent = f'    {intent}'
+                    attr_name = f'{attr_name}{index}'
+                content.append(f'{intent}{load_content}')
+                return content
+        for var in self.var_dict.values():
+            content = var.render_output_value(root, inst)
             if content:
                 render_content.extend(content)
         return render_content
