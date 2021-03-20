@@ -9,7 +9,7 @@ module tb;
         cfg.load_value("cfg.cfg", "cfg");
         cfg.print_value();
         cfg.v_int = 100;
-        cfg.subcfg_array[5][0].str_array_array[2][2] = "9";
+        cfg.subcfg_array[5][0].str_array_array[2][2] = "NINE";
         cfg.output_value("cfg.cfg", "cfg");
     end
 endmodule

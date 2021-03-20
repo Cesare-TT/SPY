@@ -543,6 +543,21 @@ class SvtPyVif(sv_type):
                     render_content[class_name] = class_content
         return render_content
 
+    def load_value(self, file_name):
+        with open(file_name, 'r') as f:
+            for content in f.readlines():
+                content = content.strip()
+                pos_root = content.find('.')
+                pos_eq = content.find('=')
+                attr_name = content[pos_root+1:pos_eq]
+                if re.match(r'\$\$\d+\$\$', content[pos_eq+1:]):
+                    attr_value = re.findall(r'^\$\$\d+\$\$"(\S+)"', content[pos_eq+1:])[0]
+                elif re.match(r'\d+\.\d+', content[pos_eq+1:]):
+                    attr_value = float(content[pos_eq+1:])
+                else:
+                    attr_value = int(content[pos_eq+1:])
+                setattr(self, attr_name, attr_value)
+
     def gen_var_list(self, file_name):
         f = open(file_name, 'w')
         f.write(self.render_value())

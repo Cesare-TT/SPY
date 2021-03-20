@@ -29,5 +29,8 @@ if __name__ == '__main__':
     #         print(item.parent.get_full_name())
     #         print(item.get_full_name())
     sv.gen_var_list('cfg.cfg')
+    # sv.load_value('cfg.cfg')
+    # sv.show_var_list()
+    # sv.gen_var_list('cfg.cfg')
 
 
