@@ -81,7 +81,7 @@ class sv_type(object):
         return None
     
     def render_print_value(self, root=None, inst=None):
-        if isinstance(inst, (SvtPyVif,)):
+        if isinstance(inst, (Spy,)):
             return ['$display("%s.{} = {}", hierarchy, {});'.format(self.get_relative_name(inst).replace('"', r'\"'), self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), self.name)]
         elif isinstance(inst, (sv_array,)):
             attr_name = inst.get_relative_name(root).replace('"', r'\"')
@@ -99,7 +99,7 @@ class sv_type(object):
             return content
     
     def render_output_value(self, root=None, inst=None):
-        if isinstance(inst, (SvtPyVif,)):
+        if isinstance(inst, (Spy,)):
             return ['$fdisplay(f, "%s.{}={}", hierarchy, {});'.format(self.get_relative_name(inst).replace('"', r'\"'), self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), self.name)]
         elif isinstance(inst, (sv_array,)):
             attr_name = inst.get_relative_name(root).replace('"', r'\"')
@@ -125,7 +125,7 @@ class sv_int(sv_type):
         return 'int'
 
     def render_scan_value(self, root=None, inst=None):
-        if isinstance(inst, (SvtPyVif,)):
+        if isinstance(inst, (Spy,)):
             return ['if ($sscanf(content, $sformatf("%s.{}=%%d", hierarchy), {})) continue;'.format(self.get_relative_name(inst).replace('"', r'\"'), self.name)]
         elif isinstance(inst, (sv_array,)):
             attr_name = inst.get_relative_name(root).replace('"', r'\"')
@@ -143,7 +143,7 @@ class sv_real(sv_type):
         return 'real'
 
     def render_scan_value(self, root=None, inst=None):
-        if isinstance(inst, (SvtPyVif,)):
+        if isinstance(inst, (Spy,)):
             return ['if ($sscanf(content, $sformatf("%s.{}=%%f", hierarchy), {})) continue;'.format(self.get_relative_name(inst).replace('"', r'\"'), self.name)]
         elif isinstance(inst, (sv_array,)):
             attr_name = inst.get_relative_name(root).replace('"', r'\"')
@@ -169,7 +169,7 @@ class sv_str(sv_type):
         return ['{:<12s}    {};'.format(self.get_sv_type(), self.name)]
 
     def render_scan_value(self, root=None, inst=None):
-        if isinstance(inst, (SvtPyVif,)):
+        if isinstance(inst, (Spy,)):
             return ['if ($sscanf(content, $sformatf("%s.{}=$$%%d$$%%s", hierarchy), len, tmp)) begin'.format(self.get_relative_name(inst).replace('"', r'\"')),
                     '    if ($sscanf(content, $sformatf("%s.{}=$$%d$$\\\"%%%0ds\\\"", hierarchy, len, len), {})) begin'.format(self.get_relative_name(inst).replace('"', r'\"'), self.name),
                     '        continue;',
@@ -189,7 +189,7 @@ class sv_str(sv_type):
                     'end']
 
     def render_print_value(self, root=None, inst=None):
-        if isinstance(inst, (SvtPyVif,)):
+        if isinstance(inst, (Spy,)):
             quote = r'\"'
             return ['$display("%s.{} = {}{}{}", hierarchy, {});'.format(self.get_relative_name(inst).replace('"', r'\"'), quote, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), quote, self.name)]
         elif isinstance(inst, (sv_array,)):
@@ -210,7 +210,7 @@ class sv_str(sv_type):
     def render_output_value(self, root=None, inst=None):
         quote = r'\"'
         prefix_str = f'$$%0d$$'
-        if isinstance(inst, (SvtPyVif,)):
+        if isinstance(inst, (Spy,)):
             postfix_str = f'{self.name}.len(),'
             return ['$fdisplay(f, "%s.{}={}{}{}{}", hierarchy, {} {});'.format(self.get_relative_name(inst).replace('"', r'\"'), prefix_str, quote, self.get_sv_string_field(self.get_sv_type()).replace("%", "%0"), quote, postfix_str, self.name)]
         elif isinstance(inst, (sv_array,)):
@@ -295,7 +295,7 @@ class sv_array(sv_type):
         render_content = list()
         if inst is None:
             for k, v in self.value.items():
-                if isinstance(v, (sv_int, sv_real, sv_str, SvtPyVif)):
+                if isinstance(v, (sv_int, sv_real, sv_str, Spy)):
                     render_content.append('{:<12s}    {}[{}];'.format(v.get_sv_type(), self.name, k.get_sv_type()))
                 elif isinstance(v, (sv_array,)):
                     render_content.extend(v.render_declare(sv_name=f'{self.name}[{k.get_sv_type()}]', inst=self))
@@ -373,7 +373,7 @@ class sv_array(sv_type):
                 for class_name, class_content in content.items():
                     return {class_name: class_content}
 
-class SvtPyVif(sv_type):
+class Spy(sv_type):
     def __init__(self, value=None, name="") -> None:
         super().__init__(value=value, name=name)
         object.__setattr__(self, 'var_dict', dict())
@@ -406,7 +406,7 @@ class SvtPyVif(sv_type):
             root = self
             inst = self
         else:
-            if isinstance(inst, (SvtPyVif,)):
+            if isinstance(inst, (Spy,)):
                 return ['{} = new();'.format(self.get_relative_name(root).replace('"', r'\"'))]
             elif isinstance(inst, (sv_array,)):
                 return ['{}{} = new();'.format(inst.get_relative_name(root).replace('"', r'\"'), ''.join(f'[{i}]' for i in inst.sv_index_list))]
@@ -422,7 +422,7 @@ class SvtPyVif(sv_type):
             root = self
             inst = self
         else:
-            if isinstance(inst, (SvtPyVif,)):
+            if isinstance(inst, (Spy,)):
                 return ['if ($sscanf(content, $sformatf("%s.{}%%s", hierarchy), tmp)) {}'.format(self.get_relative_name(root).replace('"', r'\"'), ''.join(['{}'.format(item) for item in self.render_instantiate(root, inst)]))]
             elif isinstance(inst, (sv_array,)):
                 attr_name = inst.get_relative_name(root).replace('"', r'\"')
@@ -447,7 +447,7 @@ class SvtPyVif(sv_type):
             root = self
             inst = self
         else:
-            if isinstance(inst, (SvtPyVif,)):
+            if isinstance(inst, (Spy,)):
                 return [f'{self.get_relative_name(root)}.load_value(path, "{self.get_full_name()}");']
             elif isinstance(inst, (sv_array,)):
                 attr_name = inst.get_relative_name(root).replace('"', r'\"')
@@ -475,7 +475,7 @@ class SvtPyVif(sv_type):
             root = self
             inst = self
         else:
-            if isinstance(inst, (SvtPyVif,)):
+            if isinstance(inst, (Spy,)):
                 return [f'{self.get_relative_name(root)}.print_value("{self.get_full_name()}");']
             elif isinstance(inst, (sv_array,)):
                 attr_name = inst.get_relative_name(root).replace('"', r'\"')
@@ -503,7 +503,7 @@ class SvtPyVif(sv_type):
             root = self
             inst = self
         else:
-            if isinstance(inst, (SvtPyVif,)):
+            if isinstance(inst, (Spy,)):
                 return [f'{self.get_relative_name(root)}.output_value(path, "{self.get_full_name()}", f);']
             elif isinstance(inst, (sv_array,)):
                 attr_name = inst.get_relative_name(root).replace('"', r'\"')
@@ -527,7 +527,7 @@ class SvtPyVif(sv_type):
 
     def render_sv_class(self):
         render_content = dict()
-        env = Environment(loader=PackageLoader('svt_py_vif', 'template'))
+        env = Environment(loader=PackageLoader('spy', 'template'))
         template = env.get_template('template.sv')
         template.globals['builtins'] = builtins
         template.globals['sv_type'] = sv_type

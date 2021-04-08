@@ -1,8 +1,8 @@
 from pprint import pprint
 
-from svt_py_vif import SvtPyVif
+from spy import Spy
 
-class Cfg(SvtPyVif):
+class Cfg(Spy):
     def __init__(self, value=None, name='') -> None:
         super().__init__(value=value, name=name)
         self.v_int = 1
@@ -11,7 +11,7 @@ class Cfg(SvtPyVif):
         self.subcfg = SubCfg()
         self.subcfg_array = [[SubCfg()], [SubCfg()], [SubCfg()]]
 
-class SubCfg(SvtPyVif):
+class SubCfg(Spy):
     def __init__(self, value=None, name='') -> None:
         super().__init__(value=value, name=name)
         self.int_list = [1, 2, 3]
