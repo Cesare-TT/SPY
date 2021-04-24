@@ -147,7 +147,7 @@ class SpyClass(SpyProtoRoot):
 
     def python_class(self):
         env = Environment(loader=PackageLoader('Spy','template'))
-        template = env.get_template('class_template.jinja')
+        template = env.get_template('class_template.jinja2')
         text = template.render(ast=self) 
         return text
 

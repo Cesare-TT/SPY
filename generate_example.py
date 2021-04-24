@@ -1,4 +1,4 @@
-from Spy import StreamHelper,generate_python
+from Spy import SpyStreamHelper,generate_python
 from Spy.SpyProto import *
 
 

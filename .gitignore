@@ -127,3 +127,18 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+
+# pipe_dev
+pipe_dev/csrc
+pipe_dev/simv.daidir
+pipe_dev/simv
+pipe_dev/*.o
+pipe_dev/ucli.key
+pipe_dev/vc_hdrs.h
+pipe_dev/SpyPipeClient
+
+
+
+

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package spy_pipe_pkg;
+
+service SpyPipeGRPC {
+    rpc SendData(stream Data) returns (ReceivedCount) {}
+}
+
+message Data {
+    string payload = 1;
+    string control = 2;
+}
+
+message ReceivedCount {
+    string control = 1;
+}
+

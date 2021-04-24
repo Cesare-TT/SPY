@@ -3,6 +3,8 @@ from . import SpyStreamHelper
 from . import SpyProto
 from . import SpyProto
 
+from .SpyPipe.SpyPipeServer import RemoteStorage,SpyPipeServer
+
 def generate_python(path,*templates):
     head = 'from Spy import StreamHelper,SpyInst'
     template_string = '\n\n\n'.join([template().python_class() for template in templates])
