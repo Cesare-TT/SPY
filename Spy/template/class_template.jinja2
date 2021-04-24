@@ -1,0 +1,32 @@
+
+
+
+class {{ast.__class__.__name__}}(object):
+
+    def __init__(self):
+        super().__init__()
+        {%- for element in ast.content_as_list %}
+        self.{{element.name}} = {{ element.default_value }}
+        {%- endfor %}
+
+    def pack(self,field=0,unuse=None):
+        {%- for field,element in ast.content_as_dict %}
+        stream_{{element.name }} = StreamHelper.{{ element.type_string }}StreamHelper({{element.helper_param}}).pack({{field}},self.{{element.name}})
+        {%- endfor %}
+        stream = {%- for element in ast.content_as_list %} stream_{{element.name }} + {%- endfor %} b''
+        return StreamHelper.ClassStreamHelper().stream_assembler(field,stream)
+
+    def unpack(self,dat):
+        stream = StreamHelper.ClassStreamHelper()
+        stream_dict = stream.stream_splitter(dat)
+        for k,v in stream_dict.items():
+            {%- for field,element in ast.content_as_dict %}
+            if k=={{field}}: self.{{element.name}} = StreamHelper.{{element.type_string}}StreamHelper({{element.helper_param}}).unpack(v)
+            {%- endfor %}
+        return self
+
+if __name__ == '__main__':
+    obj1_{{ast.__class__.__name__}} = {{ast.__class__.__name__}}()
+    stream_{{ast.__class__.__name__}} = obj1_{{ast.__class__.__name__}}.pack()
+    obj2_{{ast.__class__.__name__}} = {{ast.__class__.__name__}}()
+    obj2_{{ast.__class__.__name__}}.unpack(stream_{{ast.__class__.__name__}})
