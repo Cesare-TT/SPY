@@ -3,7 +3,7 @@ syntax = "proto3";
 package spy_pipe_pkg;
 
 service SpyPipeGRPC {
-    rpc SendData(stream Data) returns (ReceivedCount) {}
+    rpc SendData(stream Data) returns (stream Data) {}
 }
 
 message Data {
@@ -11,7 +11,4 @@ message Data {
     string control = 2;
 }
 
-message ReceivedCount {
-    string control = 1;
-}
 

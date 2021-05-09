@@ -15,19 +15,36 @@ class RemoteStorage(proto_pb2_grpc.SpyPipeGRPCServicer):
         self.stop_event = stop_event
 
     def SendData(self,request_iterator,context):
-        req_list = []
-        while 1:
-            req = next(request_iterator)
-            print(req)
-            self.process_SendData(req)
-            req_list.append(req)
-            if req.control =="end":
-                #time.sleep(5)
+        #req_list = []
+        stop = False
+        for req in request_iterator:
+            #if stop == True:
+            #    return
+            #print("Server::get req:",req)
+            #return
+            #yield proto_pb2.Data(payload=req.payload,control=req.control)
+            if req.control =='end':
+                print("Server::get end.")
+                stop = True
                 self.stop_event.set()
-                #print(req_list)
-                #self.main_Server.stop_process()
-                #self.main_Server.stop_event.set()
-                return proto_pb2.ReceivedCount(control=req.control)
+                yield proto_pb2.Data(payload=req.payload,control=req.control)
+                return
+            else:
+                yield proto_pb2.Data(payload=req.payload,control=req.control)
+         #while 1:
+         #    req = next(request_iterator)
+         #    print('server get data:')
+         #    print(req)
+         #    self.process_SendData(req)
+         #    req_list.append(req)
+         #    yield proto_pb2.Data(payload=req.payload,control=req.control)
+            # if req.control =="end":
+            #     #time.sleep(5)
+            #     self.stop_event.set()
+            #     #print(req_list)
+            #     #self.main_Server.stop_process()
+            #     #self.main_Server.stop_event.set()
+            #     return proto_pb2.Data(control=req.control)
 
     def process_SendData(self,req):
         pass
@@ -41,13 +58,16 @@ class SpyPipeServer(Process):
 
     def run(self):
         stop_event = Event()
+        sock_name = 'unix:SpyPipe_%s.sock' % self.name
         #queue_rpc2storage = Queue(100)
         self.grpc_server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
         proto_pb2_grpc.add_SpyPipeGRPCServicer_to_server(RemoteStorage(stop_event), self.grpc_server)
-        self.grpc_server.add_insecure_port('unix:SpyPipe_%s.sock' % self.name)
+        self.grpc_server.add_insecure_port(sock_name)
+        print('Server::start with sock %s' % sock_name)
         #self.grpc_server.add_insecure_port('http::./test')
 
         self.grpc_server.start()
+        print('Server::wait stop event.')
         stop_event.wait()
         self.stop()
 
@@ -62,7 +82,7 @@ if __name__ == '__main__':
     # server.stop(grace=None)
     print('python server started.')
     import sys
-    server = SpyPipeServer('test')
+    server = SpyPipeServer(sys.argv[1])
     server.start()
     #server.stop()
 

@@ -36,22 +36,22 @@ class SpyPipeGRPC final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    std::unique_ptr< ::grpc::ClientWriterInterface< ::spy_pipe_pkg::Data>> SendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response) {
-      return std::unique_ptr< ::grpc::ClientWriterInterface< ::spy_pipe_pkg::Data>>(SendDataRaw(context, response));
+    std::unique_ptr< ::grpc::ClientReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>> SendData(::grpc::ClientContext* context) {
+      return std::unique_ptr< ::grpc::ClientReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>>(SendDataRaw(context));
     }
-    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::spy_pipe_pkg::Data>> AsyncSendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::spy_pipe_pkg::Data>>(AsyncSendDataRaw(context, response, cq, tag));
+    std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>> AsyncSendData(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>>(AsyncSendDataRaw(context, cq, tag));
     }
-    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::spy_pipe_pkg::Data>> PrepareAsyncSendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::spy_pipe_pkg::Data>>(PrepareAsyncSendDataRaw(context, response, cq));
+    std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>> PrepareAsyncSendData(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>>(PrepareAsyncSendDataRaw(context, cq));
     }
     class experimental_async_interface {
      public:
       virtual ~experimental_async_interface() {}
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void SendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::ClientWriteReactor< ::spy_pipe_pkg::Data>* reactor) = 0;
+      virtual void SendData(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::spy_pipe_pkg::Data,::spy_pipe_pkg::Data>* reactor) = 0;
       #else
-      virtual void SendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::experimental::ClientWriteReactor< ::spy_pipe_pkg::Data>* reactor) = 0;
+      virtual void SendData(::grpc::ClientContext* context, ::grpc::experimental::ClientBidiReactor< ::spy_pipe_pkg::Data,::spy_pipe_pkg::Data>* reactor) = 0;
       #endif
     };
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -62,29 +62,29 @@ class SpyPipeGRPC final {
     #endif
     virtual class experimental_async_interface* experimental_async() { return nullptr; }
   private:
-    virtual ::grpc::ClientWriterInterface< ::spy_pipe_pkg::Data>* SendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response) = 0;
-    virtual ::grpc::ClientAsyncWriterInterface< ::spy_pipe_pkg::Data>* AsyncSendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
-    virtual ::grpc::ClientAsyncWriterInterface< ::spy_pipe_pkg::Data>* PrepareAsyncSendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* SendDataRaw(::grpc::ClientContext* context) = 0;
+    virtual ::grpc::ClientAsyncReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* AsyncSendDataRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderWriterInterface< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* PrepareAsyncSendDataRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
-    std::unique_ptr< ::grpc::ClientWriter< ::spy_pipe_pkg::Data>> SendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response) {
-      return std::unique_ptr< ::grpc::ClientWriter< ::spy_pipe_pkg::Data>>(SendDataRaw(context, response));
+    std::unique_ptr< ::grpc::ClientReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>> SendData(::grpc::ClientContext* context) {
+      return std::unique_ptr< ::grpc::ClientReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>>(SendDataRaw(context));
     }
-    std::unique_ptr< ::grpc::ClientAsyncWriter< ::spy_pipe_pkg::Data>> AsyncSendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::spy_pipe_pkg::Data>>(AsyncSendDataRaw(context, response, cq, tag));
+    std::unique_ptr<  ::grpc::ClientAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>> AsyncSendData(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>>(AsyncSendDataRaw(context, cq, tag));
     }
-    std::unique_ptr< ::grpc::ClientAsyncWriter< ::spy_pipe_pkg::Data>> PrepareAsyncSendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::spy_pipe_pkg::Data>>(PrepareAsyncSendDataRaw(context, response, cq));
+    std::unique_ptr<  ::grpc::ClientAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>> PrepareAsyncSendData(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>>(PrepareAsyncSendDataRaw(context, cq));
     }
     class experimental_async final :
       public StubInterface::experimental_async_interface {
      public:
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void SendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::ClientWriteReactor< ::spy_pipe_pkg::Data>* reactor) override;
+      void SendData(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::spy_pipe_pkg::Data,::spy_pipe_pkg::Data>* reactor) override;
       #else
-      void SendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::experimental::ClientWriteReactor< ::spy_pipe_pkg::Data>* reactor) override;
+      void SendData(::grpc::ClientContext* context, ::grpc::experimental::ClientBidiReactor< ::spy_pipe_pkg::Data,::spy_pipe_pkg::Data>* reactor) override;
       #endif
      private:
       friend class Stub;
@@ -97,9 +97,9 @@ class SpyPipeGRPC final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class experimental_async async_stub_{this};
-    ::grpc::ClientWriter< ::spy_pipe_pkg::Data>* SendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response) override;
-    ::grpc::ClientAsyncWriter< ::spy_pipe_pkg::Data>* AsyncSendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq, void* tag) override;
-    ::grpc::ClientAsyncWriter< ::spy_pipe_pkg::Data>* PrepareAsyncSendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* SendDataRaw(::grpc::ClientContext* context) override;
+    ::grpc::ClientAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* AsyncSendDataRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* PrepareAsyncSendDataRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_SendData_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
@@ -108,7 +108,7 @@ class SpyPipeGRPC final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status SendData(::grpc::ServerContext* context, ::grpc::ServerReader< ::spy_pipe_pkg::Data>* reader, ::spy_pipe_pkg::ReceivedCount* response);
+    virtual ::grpc::Status SendData(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* stream);
   };
   template <class BaseClass>
   class WithAsyncMethod_SendData : public BaseClass {
@@ -122,12 +122,12 @@ class SpyPipeGRPC final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::spy_pipe_pkg::Data>* /*reader*/, ::spy_pipe_pkg::ReceivedCount* /*response*/) override {
+    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSendData(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::spy_pipe_pkg::ReceivedCount, ::spy_pipe_pkg::Data>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncClientStreaming(0, context, reader, new_call_cq, notification_cq, tag);
+    void RequestSendData(::grpc::ServerContext* context, ::grpc::ServerAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* stream, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncBidiStreaming(0, context, stream, new_call_cq, notification_cq, tag);
     }
   };
   typedef WithAsyncMethod_SendData<Service > AsyncService;
@@ -143,29 +143,29 @@ class SpyPipeGRPC final {
       ::grpc::Service::experimental().
     #endif
         MarkMethodCallback(0,
-          new ::grpc::internal::CallbackClientStreamingHandler< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::ReceivedCount>(
+          new ::grpc::internal::CallbackBidiHandler< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
                    ::grpc::CallbackServerContext*
     #else
                    ::grpc::experimental::CallbackServerContext*
     #endif
-                     context, ::spy_pipe_pkg::ReceivedCount* response) { return this->SendData(context, response); }));
+                     context) { return this->SendData(context); }));
     }
     ~ExperimentalWithCallbackMethod_SendData() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::spy_pipe_pkg::Data>* /*reader*/, ::spy_pipe_pkg::ReceivedCount* /*response*/) override {
+    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-    virtual ::grpc::ServerReadReactor< ::spy_pipe_pkg::Data>* SendData(
-      ::grpc::CallbackServerContext* /*context*/, ::spy_pipe_pkg::ReceivedCount* /*response*/)
+    virtual ::grpc::ServerBidiReactor< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* SendData(
+      ::grpc::CallbackServerContext* /*context*/)
     #else
-    virtual ::grpc::experimental::ServerReadReactor< ::spy_pipe_pkg::Data>* SendData(
-      ::grpc::experimental::CallbackServerContext* /*context*/, ::spy_pipe_pkg::ReceivedCount* /*response*/)
+    virtual ::grpc::experimental::ServerBidiReactor< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* SendData(
+      ::grpc::experimental::CallbackServerContext* /*context*/)
     #endif
       { return nullptr; }
   };
@@ -186,7 +186,7 @@ class SpyPipeGRPC final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::spy_pipe_pkg::Data>* /*reader*/, ::spy_pipe_pkg::ReceivedCount* /*response*/) override {
+    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -203,12 +203,12 @@ class SpyPipeGRPC final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::spy_pipe_pkg::Data>* /*reader*/, ::spy_pipe_pkg::ReceivedCount* /*response*/) override {
+    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSendData(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncClientStreaming(0, context, reader, new_call_cq, notification_cq, tag);
+    void RequestSendData(::grpc::ServerContext* context, ::grpc::ServerAsyncReaderWriter< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* stream, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncBidiStreaming(0, context, stream, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -223,29 +223,29 @@ class SpyPipeGRPC final {
       ::grpc::Service::experimental().
     #endif
         MarkMethodRawCallback(0,
-          new ::grpc::internal::CallbackClientStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+          new ::grpc::internal::CallbackBidiHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
                    ::grpc::CallbackServerContext*
     #else
                    ::grpc::experimental::CallbackServerContext*
     #endif
-                     context, ::grpc::ByteBuffer* response) { return this->SendData(context, response); }));
+                     context) { return this->SendData(context); }));
     }
     ~ExperimentalWithRawCallbackMethod_SendData() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::spy_pipe_pkg::Data>* /*reader*/, ::spy_pipe_pkg::ReceivedCount* /*response*/) override {
+    ::grpc::Status SendData(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-    virtual ::grpc::ServerReadReactor< ::grpc::ByteBuffer>* SendData(
-      ::grpc::CallbackServerContext* /*context*/, ::grpc::ByteBuffer* /*response*/)
+    virtual ::grpc::ServerBidiReactor< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* SendData(
+      ::grpc::CallbackServerContext* /*context*/)
     #else
-    virtual ::grpc::experimental::ServerReadReactor< ::grpc::ByteBuffer>* SendData(
-      ::grpc::experimental::CallbackServerContext* /*context*/, ::grpc::ByteBuffer* /*response*/)
+    virtual ::grpc::experimental::ServerBidiReactor< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* SendData(
+      ::grpc::experimental::CallbackServerContext* /*context*/)
     #endif
       { return nullptr; }
   };

@@ -14,10 +14,10 @@ class SpyPipeGRPCStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.SendData = channel.stream_unary(
+        self.SendData = channel.stream_stream(
                 '/spy_pipe_pkg.SpyPipeGRPC/SendData',
                 request_serializer=SpyPipeGRPC__pb2.Data.SerializeToString,
-                response_deserializer=SpyPipeGRPC__pb2.ReceivedCount.FromString,
+                response_deserializer=SpyPipeGRPC__pb2.Data.FromString,
                 )
 
 
@@ -33,10 +33,10 @@ class SpyPipeGRPCServicer(object):
 
 def add_SpyPipeGRPCServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'SendData': grpc.stream_unary_rpc_method_handler(
+            'SendData': grpc.stream_stream_rpc_method_handler(
                     servicer.SendData,
                     request_deserializer=SpyPipeGRPC__pb2.Data.FromString,
-                    response_serializer=SpyPipeGRPC__pb2.ReceivedCount.SerializeToString,
+                    response_serializer=SpyPipeGRPC__pb2.Data.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -59,8 +59,8 @@ class SpyPipeGRPC(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/spy_pipe_pkg.SpyPipeGRPC/SendData',
+        return grpc.experimental.stream_stream(request_iterator, target, '/spy_pipe_pkg.SpyPipeGRPC/SendData',
             SpyPipeGRPC__pb2.Data.SerializeToString,
-            SpyPipeGRPC__pb2.ReceivedCount.FromString,
+            SpyPipeGRPC__pb2.Data.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -32,45 +32,44 @@ std::unique_ptr< SpyPipeGRPC::Stub> SpyPipeGRPC::NewStub(const std::shared_ptr< 
 }
 
 SpyPipeGRPC::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
-  : channel_(channel), rpcmethod_SendData_(SpyPipeGRPC_method_names[0], ::grpc::internal::RpcMethod::CLIENT_STREAMING, channel)
+  : channel_(channel), rpcmethod_SendData_(SpyPipeGRPC_method_names[0], ::grpc::internal::RpcMethod::BIDI_STREAMING, channel)
   {}
 
-::grpc::ClientWriter< ::spy_pipe_pkg::Data>* SpyPipeGRPC::Stub::SendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response) {
-  return ::grpc::internal::ClientWriterFactory< ::spy_pipe_pkg::Data>::Create(channel_.get(), rpcmethod_SendData_, context, response);
+::grpc::ClientReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* SpyPipeGRPC::Stub::SendDataRaw(::grpc::ClientContext* context) {
+  return ::grpc::internal::ClientReaderWriterFactory< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>::Create(channel_.get(), rpcmethod_SendData_, context);
 }
 
-void SpyPipeGRPC::Stub::experimental_async::SendData(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::experimental::ClientWriteReactor< ::spy_pipe_pkg::Data>* reactor) {
-  ::grpc::internal::ClientCallbackWriterFactory< ::spy_pipe_pkg::Data>::Create(stub_->channel_.get(), stub_->rpcmethod_SendData_, context, response, reactor);
+void SpyPipeGRPC::Stub::experimental_async::SendData(::grpc::ClientContext* context, ::grpc::experimental::ClientBidiReactor< ::spy_pipe_pkg::Data,::spy_pipe_pkg::Data>* reactor) {
+  ::grpc::internal::ClientCallbackReaderWriterFactory< ::spy_pipe_pkg::Data,::spy_pipe_pkg::Data>::Create(stub_->channel_.get(), stub_->rpcmethod_SendData_, context, reactor);
 }
 
-::grpc::ClientAsyncWriter< ::spy_pipe_pkg::Data>* SpyPipeGRPC::Stub::AsyncSendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq, void* tag) {
-  return ::grpc::internal::ClientAsyncWriterFactory< ::spy_pipe_pkg::Data>::Create(channel_.get(), cq, rpcmethod_SendData_, context, response, true, tag);
+::grpc::ClientAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* SpyPipeGRPC::Stub::AsyncSendDataRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncReaderWriterFactory< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>::Create(channel_.get(), cq, rpcmethod_SendData_, context, true, tag);
 }
 
-::grpc::ClientAsyncWriter< ::spy_pipe_pkg::Data>* SpyPipeGRPC::Stub::PrepareAsyncSendDataRaw(::grpc::ClientContext* context, ::spy_pipe_pkg::ReceivedCount* response, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncWriterFactory< ::spy_pipe_pkg::Data>::Create(channel_.get(), cq, rpcmethod_SendData_, context, response, false, nullptr);
+::grpc::ClientAsyncReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* SpyPipeGRPC::Stub::PrepareAsyncSendDataRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncReaderWriterFactory< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>::Create(channel_.get(), cq, rpcmethod_SendData_, context, false, nullptr);
 }
 
 SpyPipeGRPC::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       SpyPipeGRPC_method_names[0],
-      ::grpc::internal::RpcMethod::CLIENT_STREAMING,
-      new ::grpc::internal::ClientStreamingHandler< SpyPipeGRPC::Service, ::spy_pipe_pkg::Data, ::spy_pipe_pkg::ReceivedCount>(
+      ::grpc::internal::RpcMethod::BIDI_STREAMING,
+      new ::grpc::internal::BidiStreamingHandler< SpyPipeGRPC::Service, ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>(
           [](SpyPipeGRPC::Service* service,
              ::grpc::ServerContext* ctx,
-             ::grpc::ServerReader<::spy_pipe_pkg::Data>* reader,
-             ::spy_pipe_pkg::ReceivedCount* resp) {
-               return service->SendData(ctx, reader, resp);
+             ::grpc::ServerReaderWriter<::spy_pipe_pkg::Data,
+             ::spy_pipe_pkg::Data>* stream) {
+               return service->SendData(ctx, stream);
              }, this)));
 }
 
 SpyPipeGRPC::Service::~Service() {
 }
 
-::grpc::Status SpyPipeGRPC::Service::SendData(::grpc::ServerContext* context, ::grpc::ServerReader< ::spy_pipe_pkg::Data>* reader, ::spy_pipe_pkg::ReceivedCount* response) {
+::grpc::Status SpyPipeGRPC::Service::SendData(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::spy_pipe_pkg::Data, ::spy_pipe_pkg::Data>* stream) {
   (void) context;
-  (void) reader;
-  (void) response;
+  (void) stream;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 

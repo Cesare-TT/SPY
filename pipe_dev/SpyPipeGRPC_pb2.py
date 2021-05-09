@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x11SpyPipeGRPC.proto\x12\x0cspy_pipe_pkg\"(\n\x04\x44\x61ta\x12\x0f\n\x07payload\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontrol\x18\x02 \x01(\t\" \n\rReceivedCount\x12\x0f\n\x07\x63ontrol\x18\x01 \x01(\t2N\n\x0bSpyPipeGRPC\x12?\n\x08SendData\x12\x12.spy_pipe_pkg.Data\x1a\x1b.spy_pipe_pkg.ReceivedCount\"\x00(\x01\x62\x06proto3'
+  serialized_pb=b'\n\x11SpyPipeGRPC.proto\x12\x0cspy_pipe_pkg\"(\n\x04\x44\x61ta\x12\x0f\n\x07payload\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontrol\x18\x02 \x01(\t2G\n\x0bSpyPipeGRPC\x12\x38\n\x08SendData\x12\x12.spy_pipe_pkg.Data\x1a\x12.spy_pipe_pkg.Data\"\x00(\x01\x30\x01\x62\x06proto3'
 )
 
 
@@ -63,40 +63,7 @@ _DATA = _descriptor.Descriptor(
   serialized_end=75,
 )
 
-
-_RECEIVEDCOUNT = _descriptor.Descriptor(
-  name='ReceivedCount',
-  full_name='spy_pipe_pkg.ReceivedCount',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='control', full_name='spy_pipe_pkg.ReceivedCount.control', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=77,
-  serialized_end=109,
-)
-
 DESCRIPTOR.message_types_by_name['Data'] = _DATA
-DESCRIPTOR.message_types_by_name['ReceivedCount'] = _RECEIVEDCOUNT
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Data = _reflection.GeneratedProtocolMessageType('Data', (_message.Message,), {
@@ -105,13 +72,6 @@ Data = _reflection.GeneratedProtocolMessageType('Data', (_message.Message,), {
   # @@protoc_insertion_point(class_scope:spy_pipe_pkg.Data)
   })
 _sym_db.RegisterMessage(Data)
-
-ReceivedCount = _reflection.GeneratedProtocolMessageType('ReceivedCount', (_message.Message,), {
-  'DESCRIPTOR' : _RECEIVEDCOUNT,
-  '__module__' : 'SpyPipeGRPC_pb2'
-  # @@protoc_insertion_point(class_scope:spy_pipe_pkg.ReceivedCount)
-  })
-_sym_db.RegisterMessage(ReceivedCount)
 
 
 
@@ -122,8 +82,8 @@ _SPYPIPEGRPC = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=111,
-  serialized_end=189,
+  serialized_start=77,
+  serialized_end=148,
   methods=[
   _descriptor.MethodDescriptor(
     name='SendData',
@@ -131,7 +91,7 @@ _SPYPIPEGRPC = _descriptor.ServiceDescriptor(
     index=0,
     containing_service=None,
     input_type=_DATA,
-    output_type=_RECEIVEDCOUNT,
+    output_type=_DATA,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

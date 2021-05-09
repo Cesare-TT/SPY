@@ -19,10 +19,6 @@ class DataDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Data> _instance;
 } _Data_default_instance_;
-class ReceivedCountDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ReceivedCount> _instance;
-} _ReceivedCount_default_instance_;
 }  // namespace spy_pipe_pkg
 static void InitDefaultsscc_info_Data_SpyPipeGRPC_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -37,20 +33,7 @@ static void InitDefaultsscc_info_Data_SpyPipeGRPC_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Data_SpyPipeGRPC_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Data_SpyPipeGRPC_2eproto}, {}};
 
-static void InitDefaultsscc_info_ReceivedCount_SpyPipeGRPC_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::spy_pipe_pkg::_ReceivedCount_default_instance_;
-    new (ptr) ::spy_pipe_pkg::ReceivedCount();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ReceivedCount_SpyPipeGRPC_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_ReceivedCount_SpyPipeGRPC_2eproto}, {}};
-
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_SpyPipeGRPC_2eproto[2];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_SpyPipeGRPC_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_SpyPipeGRPC_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_SpyPipeGRPC_2eproto = nullptr;
 
@@ -62,42 +45,32 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_SpyPipeGRPC_2eproto::offsets[]
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::spy_pipe_pkg::Data, payload_),
   PROTOBUF_FIELD_OFFSET(::spy_pipe_pkg::Data, control_),
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::spy_pipe_pkg::ReceivedCount, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::spy_pipe_pkg::ReceivedCount, control_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::spy_pipe_pkg::Data)},
-  { 7, -1, sizeof(::spy_pipe_pkg::ReceivedCount)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::spy_pipe_pkg::_Data_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::spy_pipe_pkg::_ReceivedCount_default_instance_),
 };
 
 const char descriptor_table_protodef_SpyPipeGRPC_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\021SpyPipeGRPC.proto\022\014spy_pipe_pkg\"(\n\004Dat"
-  "a\022\017\n\007payload\030\001 \001(\t\022\017\n\007control\030\002 \001(\t\" \n\rR"
-  "eceivedCount\022\017\n\007control\030\001 \001(\t2N\n\013SpyPipe"
-  "GRPC\022\?\n\010SendData\022\022.spy_pipe_pkg.Data\032\033.s"
-  "py_pipe_pkg.ReceivedCount\"\000(\001b\006proto3"
+  "a\022\017\n\007payload\030\001 \001(\t\022\017\n\007control\030\002 \001(\t2G\n\013S"
+  "pyPipeGRPC\0228\n\010SendData\022\022.spy_pipe_pkg.Da"
+  "ta\032\022.spy_pipe_pkg.Data\"\000(\0010\001b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_SpyPipeGRPC_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_SpyPipeGRPC_2eproto_sccs[2] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_SpyPipeGRPC_2eproto_sccs[1] = {
   &scc_info_Data_SpyPipeGRPC_2eproto.base,
-  &scc_info_ReceivedCount_SpyPipeGRPC_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_SpyPipeGRPC_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_SpyPipeGRPC_2eproto = {
-  false, false, descriptor_table_protodef_SpyPipeGRPC_2eproto, "SpyPipeGRPC.proto", 197,
-  &descriptor_table_SpyPipeGRPC_2eproto_once, descriptor_table_SpyPipeGRPC_2eproto_sccs, descriptor_table_SpyPipeGRPC_2eproto_deps, 2, 0,
+  false, false, descriptor_table_protodef_SpyPipeGRPC_2eproto, "SpyPipeGRPC.proto", 156,
+  &descriptor_table_SpyPipeGRPC_2eproto_once, descriptor_table_SpyPipeGRPC_2eproto_sccs, descriptor_table_SpyPipeGRPC_2eproto_deps, 1, 0,
   schemas, file_default_instances, TableStruct_SpyPipeGRPC_2eproto::offsets,
-  file_level_metadata_SpyPipeGRPC_2eproto, 2, file_level_enum_descriptors_SpyPipeGRPC_2eproto, file_level_service_descriptors_SpyPipeGRPC_2eproto,
+  file_level_metadata_SpyPipeGRPC_2eproto, 1, file_level_enum_descriptors_SpyPipeGRPC_2eproto, file_level_service_descriptors_SpyPipeGRPC_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -348,220 +321,11 @@ void Data::InternalSwap(Data* other) {
 }
 
 
-// ===================================================================
-
-class ReceivedCount::_Internal {
- public:
-};
-
-ReceivedCount::ReceivedCount(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
-  SharedCtor();
-  RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:spy_pipe_pkg.ReceivedCount)
-}
-ReceivedCount::ReceivedCount(const ReceivedCount& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  control_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (!from._internal_control().empty()) {
-    control_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_control(), 
-      GetArena());
-  }
-  // @@protoc_insertion_point(copy_constructor:spy_pipe_pkg.ReceivedCount)
-}
-
-void ReceivedCount::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ReceivedCount_SpyPipeGRPC_2eproto.base);
-  control_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-
-ReceivedCount::~ReceivedCount() {
-  // @@protoc_insertion_point(destructor:spy_pipe_pkg.ReceivedCount)
-  SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-void ReceivedCount::SharedDtor() {
-  GOOGLE_DCHECK(GetArena() == nullptr);
-  control_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-}
-
-void ReceivedCount::ArenaDtor(void* object) {
-  ReceivedCount* _this = reinterpret_cast< ReceivedCount* >(object);
-  (void)_this;
-}
-void ReceivedCount::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
-}
-void ReceivedCount::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-const ReceivedCount& ReceivedCount::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ReceivedCount_SpyPipeGRPC_2eproto.base);
-  return *internal_default_instance();
-}
-
-
-void ReceivedCount::Clear() {
-// @@protoc_insertion_point(message_clear_start:spy_pipe_pkg.ReceivedCount)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  control_.ClearToEmpty();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* ReceivedCount::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    CHK_(ptr);
-    switch (tag >> 3) {
-      // string control = 1;
-      case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          auto str = _internal_mutable_control();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "spy_pipe_pkg.ReceivedCount.control"));
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->SetLastTag(tag);
-          goto success;
-        }
-        ptr = UnknownFieldParse(tag,
-            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-            ptr, ctx);
-        CHK_(ptr != nullptr);
-        continue;
-      }
-    }  // switch
-  }  // while
-success:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto success;
-#undef CHK_
-}
-
-::PROTOBUF_NAMESPACE_ID::uint8* ReceivedCount::_InternalSerialize(
-    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:spy_pipe_pkg.ReceivedCount)
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string control = 1;
-  if (this->control().size() > 0) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_control().data(), static_cast<int>(this->_internal_control().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "spy_pipe_pkg.ReceivedCount.control");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_control(), target);
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:spy_pipe_pkg.ReceivedCount)
-  return target;
-}
-
-size_t ReceivedCount::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:spy_pipe_pkg.ReceivedCount)
-  size_t total_size = 0;
-
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // string control = 1;
-  if (this->control().size() > 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_control());
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
-        _internal_metadata_, total_size, &_cached_size_);
-  }
-  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void ReceivedCount::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:spy_pipe_pkg.ReceivedCount)
-  GOOGLE_DCHECK_NE(&from, this);
-  const ReceivedCount* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ReceivedCount>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:spy_pipe_pkg.ReceivedCount)
-    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:spy_pipe_pkg.ReceivedCount)
-    MergeFrom(*source);
-  }
-}
-
-void ReceivedCount::MergeFrom(const ReceivedCount& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:spy_pipe_pkg.ReceivedCount)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if (from.control().size() > 0) {
-    _internal_set_control(from._internal_control());
-  }
-}
-
-void ReceivedCount::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:spy_pipe_pkg.ReceivedCount)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void ReceivedCount::CopyFrom(const ReceivedCount& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:spy_pipe_pkg.ReceivedCount)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool ReceivedCount::IsInitialized() const {
-  return true;
-}
-
-void ReceivedCount::InternalSwap(ReceivedCount* other) {
-  using std::swap;
-  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  control_.Swap(&other->control_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata ReceivedCount::GetMetadata() const {
-  return GetMetadataStatic();
-}
-
-
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace spy_pipe_pkg
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::spy_pipe_pkg::Data* Arena::CreateMaybeMessage< ::spy_pipe_pkg::Data >(Arena* arena) {
   return Arena::CreateMessageInternal< ::spy_pipe_pkg::Data >(arena);
-}
-template<> PROTOBUF_NOINLINE ::spy_pipe_pkg::ReceivedCount* Arena::CreateMaybeMessage< ::spy_pipe_pkg::ReceivedCount >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::spy_pipe_pkg::ReceivedCount >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 
