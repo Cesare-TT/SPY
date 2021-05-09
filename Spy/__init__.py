@@ -11,4 +11,10 @@ def generate_python(path,*templates):
     with open(path,'w') as f:
         f.write(head + template_string)
 
+def generate_sv(path,*templates):
+    head = 'import SpyLib::*;\n'
+    template_string = '\n\n\n'.join([template().sv_class() for template in templates])
+    with open(path,'w') as f:
+        f.write(head + template_string)
+
 
