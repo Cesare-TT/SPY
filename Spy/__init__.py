@@ -6,7 +6,7 @@ from . import SpyProto
 from .SpyPipe.SpyPipeServer import RemoteStorage,SpyPipeServer
 
 def generate_python(path,*templates):
-    head = 'from Spy import StreamHelper,SpyInst'
+    head = 'from Spy import SpyStreamHelper,SpyInst'
     template_string = '\n\n\n'.join([template().python_class() for template in templates])
     with open(path,'w') as f:
         f.write(head + template_string)

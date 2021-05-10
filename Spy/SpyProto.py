@@ -237,7 +237,7 @@ class SpyDArray(SpyList):
 
     @property
     def default_value(self):
-        return 'SpyInst.SpyDArrayInst(StreamHelper.%sStreamHelper,%s)' % (self._type("").type_string,','.join([str(x.default_value) for x in self._default]))
+        return 'SpyInst.SpyDArrayInst(SpyStreamHelper.%sStreamHelper,%s)' % (self._type("").type_string,','.join([str(x.default_value) for x in self._default]))
 
 
 

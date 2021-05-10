@@ -11,17 +11,17 @@ class {{ast.__class__.__name__}}(object):
 
     def pack(self,field=0,unuse=None):
         {%- for field,element in ast.content_as_dict %}
-        stream_{{element.name }} = StreamHelper.{{ element.type_string }}StreamHelper({{element.helper_param}}).pack({{field}},self.{{element.name}})
+        stream_{{element.name }} = SpyStreamHelper.{{ element.type_string }}StreamHelper({{element.helper_param}}).pack({{field}},self.{{element.name}})
         {%- endfor %}
         stream = {%- for element in ast.content_as_list %} stream_{{element.name }} + {%- endfor %} b''
-        return StreamHelper.ClassStreamHelper().stream_assembler(field,stream)
+        return SpyStreamHelper.ClassStreamHelper().stream_assembler(field,stream)
 
     def unpack(self,dat):
-        stream = StreamHelper.ClassStreamHelper()
+        stream = SpyStreamHelper.ClassStreamHelper()
         stream_dict = stream.stream_splitter(dat)
         for k,v in stream_dict.items():
             {%- for field,element in ast.content_as_dict %}
-            if k=={{field}}: self.{{element.name}} = StreamHelper.{{element.type_string}}StreamHelper({{element.helper_param}}).unpack(v)
+            if k=={{field}}: self.{{element.name}} = SpyStreamHelper.{{element.type_string}}StreamHelper({{element.helper_param}}).unpack(v)
             {%- endfor %}
         return self
 

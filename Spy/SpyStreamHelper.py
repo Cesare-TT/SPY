@@ -4,9 +4,9 @@ import math
 import struct
 
 ############################################################################################
-# StreamHelper
+# SpyStreamHelper
 ############################################################################################
-class StreamHelper(object):
+class SpyStreamHelper(object):
 
     def __init__(self,*args):
         super().__init__()
@@ -50,7 +50,7 @@ class StreamHelper(object):
 ############################################################################################
 # BitsStreamHelper
 ############################################################################################
-class BitsStreamHelper(StreamHelper):
+class BitsStreamHelper(SpyStreamHelper):
 
     def __init__(self,width):
         super().__init__()
@@ -93,7 +93,7 @@ class BitsStreamHelper(StreamHelper):
 ############################################################################################
 # StringStreamHelper
 ############################################################################################
-class StringStreamHelper(StreamHelper):
+class StringStreamHelper(SpyStreamHelper):
 
     @property
     def types(self):
@@ -114,7 +114,7 @@ class StringStreamHelper(StreamHelper):
 ############################################################################################
 # IntStreamHelper
 ############################################################################################
-class IntStreamHelper(StreamHelper):
+class IntStreamHelper(SpyStreamHelper):
 
     @property
     def types(self):
@@ -133,7 +133,7 @@ class IntStreamHelper(StreamHelper):
 ############################################################################################
 # FloatStreamHelper
 ############################################################################################
-class FloatStreamHelper(StreamHelper):
+class FloatStreamHelper(SpyStreamHelper):
 
     @property
     def types(self):
@@ -153,7 +153,7 @@ class FloatStreamHelper(StreamHelper):
 ############################################################################################
 # ListStreamHelper
 ############################################################################################
-class ListStreamHelper(StreamHelper):
+class ListStreamHelper(SpyStreamHelper):
 
     def __init__(self,inst=None):
         super().__init__()
@@ -184,7 +184,7 @@ class DArrayStreamHelper(ListStreamHelper):
 ############################################################################################
 # ClassStreamHelper
 ############################################################################################
-class ClassStreamHelper(StreamHelper):
+class ClassStreamHelper(SpyStreamHelper):
 
     def __init__(self,inst=None):
         super().__init__()
