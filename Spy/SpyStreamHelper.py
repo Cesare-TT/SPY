@@ -19,15 +19,21 @@ class StreamHelper(object):
     SPY_TYPE_LIST   = 6
 
     def _get_len(self,dat):
-        types = struct.unpack('i',dat[3:4] + b'\x00\x00\x00')[0]
+        types = self._get_type_from_key(dat)
         if types == self.SPY_TYPE_INT:   return 8
         if types == self.SPY_TYPE_FLOAT: return 12
         else:                       return 8 + struct.unpack('i',dat[4:8])[0]
 
+    def _get_field_from_key(self,key):
+        return struct.unpack('i',key[1:4] + b'\x00')[0]
+
+    def _get_type_from_key(self,key):
+        return struct.unpack('i',key[0:1] + b'\x00\x00\x00')[0]
+
     def _tag_pack(self,field,types):
         field_byte = struct.pack('i',int(field))[:-1]
         types_byte = struct.pack('i',int(types))[0:1]
-        return field_byte + types_byte
+        return types_byte + field_byte
 
     def _pack_splitter(self,dat):
         sub_pack_list = []
@@ -198,7 +204,7 @@ class ClassStreamHelper(StreamHelper):
         dat_list = self._pack_splitter(dat[8:])
         stream_dict = {}
         for i in dat_list:
-            stream_dict[struct.unpack('i',i[0:3] + b'\x00')[0]] = i
+            stream_dict[self._get_field_from_key(i)] = i
         return stream_dict
 
     def stream_assembler(self,field,stream):
