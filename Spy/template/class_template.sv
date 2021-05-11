@@ -17,7 +17,8 @@ class {{ast.__class__.__name__}};
         {{content}}
         {%- endfor %}
     endfunction
-        static function SpyBytes SerializeToOstream(bit[23:0] spy_field = 24'h0, input {{ast.__class__.__name__}} value);
+
+    static function SpyBytes SerializeToOstream(bit[23:0] spy_field = 24'h0, input {{ast.__class__.__name__}} value);
         SpyBytes   value_stream;
 
         value_stream = {

@@ -114,7 +114,7 @@ class TestStringStreamHelper(TestStreamHelper):
             string = "".join([random.choice(sets) for x in range(random.randint(0,1000))])
             self.run_once(self.Helper,string)
 
-class TestBistStreamHelper(TestStreamHelper):
+class TestBitsStreamHelper(TestStreamHelper):
     Helper = BitsStreamHelper
 
     def run_once(self,helper,width,src):
@@ -123,7 +123,7 @@ class TestBistStreamHelper(TestStreamHelper):
         self.assertEqual(src,des)
 
     def test_base(self):
-        self.run_once(self.Helper,4,200+100*256)
+        self.run_once(self.Helper,16,200+100*256)
 
     def test_random(self):
         repeat = 100

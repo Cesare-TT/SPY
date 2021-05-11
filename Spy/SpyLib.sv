@@ -13,16 +13,16 @@ typedef struct packed {
     bit [31:0]  spy_len;
 } SpyTag;
 
-parameter align_width      = 8;
+localparam align_width      = 8;
 
-parameter SPY_TYPE_BIT     = 8'h1;
-parameter SPY_TYPE_INT     = 8'h2;
-// parameter SPY_TYPE_INT32   = 8'h1;
-// parameter SPY_TYPE_INT64   = 8'h2;
-parameter SPY_TYPE_FLOAT   = 8'h3;
-parameter SPY_TYPE_MESSAGE = 8'h4;
-parameter SPY_TYPE_STRING  = 8'h5;
-parameter SPY_TYPE_LIST    = 8'h6;
+localparam SPY_TYPE_BIT     = 8'h1;
+localparam SPY_TYPE_INT     = 8'h2;
+// localparam SPY_TYPE_INT32   = 8'h1;
+// localparam SPY_TYPE_INT64   = 8'h2;
+localparam SPY_TYPE_FLOAT   = 8'h3;
+localparam SPY_TYPE_MESSAGE = 8'h4;
+localparam SPY_TYPE_STRING  = 8'h5;
+localparam SPY_TYPE_LIST    = 8'h6;
 
 class SpyBase#(type T=bit[31:0]);
     function new();
@@ -67,12 +67,14 @@ class SpyBase#(type T=bit[31:0]);
 
         head_stream = new[head_len];
         head_stream[0] = spy_type;
-        for (int ptr=0; ptr<3; ptr++)
+        for (int ptr=0; ptr<3; ptr++) begin
             head_stream[ptr+1] = spy_field[(ptr+1)*align_width-1 -: align_width];
+        end
         if (head_len == 8) begin
             value_len = value_stream.size();
-            for (int ptr=0; ptr<4; ptr++)
+            for (int ptr=0; ptr<4; ptr++) begin
                 head_stream[ptr+4] = value_len[(ptr+1)*align_width-1 -: align_width];
+            end
         end
         return {head_stream, value_stream};
     endfunction
@@ -104,8 +106,9 @@ class SpyBase#(type T=bit[31:0]);
             substream_tag = ParseHeadFromIstream(stream[ptr +:8]);
             substream_len =4+4*(HasLength(substream_tag.spy_type))+substream_tag.spy_len;
             substream = new[substream_len];
-            for (int i=ptr; i<ptr+substream_len; i++)
+            for (int i=ptr; i<ptr+substream_len; i++) begin
                 substream[i-ptr] = stream[i];
+            end
             stream_list.push_back(substream);
             ptr = ptr+substream_len;
         end
@@ -120,12 +123,16 @@ class SpyBit#(BIT_WIDTH) extends SpyBase#(bit[BIT_WIDTH-1:0]);
 
     static function SpyBytes SerializeToOstream(bit [23:0] field, bit [BIT_WIDTH-1:0] value);
         byte    stream[$];
+        byte    tmp = 8'h0;
         int     ptr;
 
         ptr = 0;
         while(ptr*align_width<=BIT_WIDTH) begin
             if ((BIT_WIDTH%align_width>0) && (align_width*(ptr+1) > BIT_WIDTH)) begin
-                stream.push_back(value[BIT_WIDTH-1 : BIT_WIDTH-1-BIT_WIDTH%align_width]);
+                for (int i=0; i<BIT_WIDTH%align_width; i++) begin
+                    tmp[i] = value[ptr*align_width+i];
+                end
+                stream.push_back(tmp);
             end else begin
                 stream.push_back(value[(ptr+1)*align_width-1 -: align_width]);
             end
@@ -144,7 +151,14 @@ class SpyBit#(BIT_WIDTH) extends SpyBase#(bit[BIT_WIDTH-1:0]);
                 value[(ptr+1)*align_width-1 -: align_width] = stream[ptr+8];
             end else begin
                 `debug_display("msb: %0d; lsb: %0d", BIT_WIDTH-1, ptr*align_width);
-                value[BIT_WIDTH-1 - BIT_WIDTH-1-BIT_WIDTH%align_width] = stream[ptr+8];
+                for (int i=0; i<BIT_WIDTH%align_width; i++) begin
+                    value[ptr*align_width+i] = stream[ptr+8][i];
+                    `debug_display("value[%0d]: %0d", ptr*align_width+i, value[ptr*align_width+i]);
+                    `debug_display("stream[%0d][%0d]: %0d", ptr+8, i, stream[ptr+8][i]);
+                end
+                // value[BIT_WIDTH-1 - BIT_WIDTH-1-BIT_WIDTH%align_width] = stream[ptr+8];
+                // `debug_display("value[%0d]: %0d", BIT_WIDTH-1 - BIT_WIDTH-1-BIT_WIDTH%align_width, value[BIT_WIDTH-1 - BIT_WIDTH-1-BIT_WIDTH%align_width]);
+                // `debug_display("stream[%0d]: %0d", ptr+8, stream[ptr+8]);
             end
         end
         // return value;
@@ -244,7 +258,7 @@ class SpyList#(type ItemType, type ItemSpyType) extends SpyBase;
         value = new[stream_list.size()];
         foreach(stream_list[i]) begin
             substream = stream_list[i];
-            // foreach (substream[i]) $display("substream[%0d]: %h", i, substream[i]);
+            foreach (substream[i]) $display("substream[%0d]: %h", i, substream[i]);
             substream_tag = SpyBase::ParseHeadFromIstream(substream);
             if (i == substream_tag.spy_field) ItemSpyType::ParseFromIstream(value[i], substream, substream_tag);
         end

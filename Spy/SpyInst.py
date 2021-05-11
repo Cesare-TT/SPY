@@ -10,8 +10,8 @@ class SpyDArrayInst(object):
 
     def pack(self,field=0,unuse=None):
         stream = b''
-        for i in self._value:
-            stream = stream + self._stream_helper(self._value[0]).pack(0,i)
+        for index,i in enumerate(self._value):
+            stream = stream + self._stream_helper(self._value[0]).pack(index,i)
         return stream
 
     def unpack(self,dat):

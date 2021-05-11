@@ -63,7 +63,9 @@ class BitsStreamHelper(SpyStreamHelper):
     def _value_pack(self,value):
         char_list =[]
         tmp = value
-        for _ in range(self.width):
+        #print(self.width)
+        #print(math.ceil(self.width/8))
+        for _ in range(math.ceil(self.width/8)):
             char = int(tmp - ((tmp>>8)<<8)) #- 128
             tmp = tmp >> 8 
             char_list.append(char)
