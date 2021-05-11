@@ -64,16 +64,20 @@ class BitsStreamHelper(SpyStreamHelper):
         char_list =[]
         tmp = value
         for _ in range(self.width):
-            char = int(tmp - ((tmp>>8)<<8)) - 128
+            char = int(tmp - ((tmp>>8)<<8)) #- 128
             tmp = tmp >> 8 
             char_list.append(char)
-        return struct.pack('%db' % len(char_list),*char_list)
+        #print(char_list)
+        return struct.pack('%dB' % len(char_list),*char_list)
     
     def _value_unpack(self,dat):
         res = 0
         offset = 0
+        #print(dat)
         for d in dat:
-            res = res + ((d+128)%256 << offset)
+            #print(d)
+            #res = res + ((d+128)%256 << offset)
+            res = res + (d%256<<offset)
             offset = offset + 8
         return res
 
