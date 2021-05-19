@@ -46,6 +46,9 @@ class SpyStreamHelper(object):
         return sub_pack_list
 
 
+    def report_string(self,val):
+        return str(val)
+
 
 ############################################################################################
 # BitsStreamHelper
@@ -115,7 +118,8 @@ class StringStreamHelper(SpyStreamHelper):
         length = struct.unpack('i',dat[4:8])[0]
         return str(struct.unpack('%ds' % length,dat[8:8+length])[0],'ascii')
 
-
+    def report_string(self,val):
+        return "\"%s\"" % str(val)
 
 ############################################################################################
 # IntStreamHelper

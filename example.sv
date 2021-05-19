@@ -13,7 +13,8 @@ class SubDemo;
         $display("a: %h", a);
         $display("b: %f", b);
     endfunction
-        static function SpyBytes SerializeToOstream(bit[23:0] spy_field = 24'h0, input SubDemo value);
+
+    static function SpyBytes SerializeToOstream(bit[23:0] spy_field = 24'h0, input SubDemo value);
         SpyBytes   value_stream;
 
         value_stream = {
@@ -67,7 +68,8 @@ class Demo;
         e.report();
         foreach(f[i]) $display("f[%0d]: %f", i, f[i]);
     endfunction
-        static function SpyBytes SerializeToOstream(bit[23:0] spy_field = 24'h0, input Demo value);
+
+    static function SpyBytes SerializeToOstream(bit[23:0] spy_field = 24'h0, input Demo value);
         SpyBytes   value_stream;
 
         value_stream = {
