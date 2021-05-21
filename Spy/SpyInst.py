@@ -1,6 +1,14 @@
-from .SpyStreamHelper import DArrayStreamHelper
-
-
+from . import SpyStreamHelper
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# line 1-10 for import
 class SpyDArrayInst(object):
 
     def __init__(self,stream_helper,*value):
@@ -15,6 +23,6 @@ class SpyDArrayInst(object):
         return stream
 
     def unpack(self,dat):
-        stream_list = DArrayStreamHelper().stream_splitter(dat)
+        stream_list = SpyStreamHelper.DArrayStreamHelper().stream_splitter(dat)
         self._value = [self._stream_helper(self._value[0]).unpack(s) for s in stream_list]
         return self._value

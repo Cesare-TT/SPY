@@ -1,6 +1,14 @@
-from jinja2     import PackageLoader,Environment
+from jinja2     import PackageLoader,Environment,FileSystemLoader
 import builtins
-
+import os
+#
+#
+#
+#
+#
+#
+#
+# line 1-10 for import
 ############################################################################################
 # SpyProtoRoot
 ############################################################################################
@@ -249,6 +257,8 @@ class SpyClass(SpyProtoRoot):
     def __init__(self,name):
         super().__init__(name,None)
         self._content_dict = {}
+        self.__auto_field_count = -1
+        self.one_file = True
 
     @property
     def type_string(self):
@@ -270,7 +280,9 @@ class SpyClass(SpyProtoRoot):
         return list(self._content_dict.items())
 
     def python_class(self):
-        env = Environment(loader=PackageLoader('Spy','template'))
+        current_work_dir = os.path.dirname(__file__)
+        TemplateLoader = FileSystemLoader(os.path.abspath(os.path.join(current_work_dir,'template')))
+        env = Environment(loader=TemplateLoader)
         template = env.get_template('class_template.jinja2')
         text = template.render(ast=self)
         return text
@@ -280,7 +292,9 @@ class SpyClass(SpyProtoRoot):
         return "self.%s" % self.name
 
     def sv_class(self):
-        env = Environment(loader=PackageLoader('Spy', 'template'))
+        current_work_dir = os.path.dirname(__file__)
+        TemplateLoader = FileSystemLoader(os.path.abspath(os.path.join(current_work_dir,'template')))
+        env = Environment(loader=TemplateLoader)
         template = env.get_template('class_template.sv')
         text = template.render(ast=self, builtins=builtins)
         return text
@@ -300,3 +314,8 @@ class SpyClass(SpyProtoRoot):
             return [var.sv_report_string(var.name) for var in self.content_as_list]
         else:
             return f'{self.name}.report();'
+
+    @property
+    def auto_field(self):
+        self.__auto_field_count += 1
+        return self.__auto_field_count

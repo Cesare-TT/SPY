@@ -2,7 +2,13 @@ from functools  import reduce
 from operator   import concat
 import math
 import struct
-
+#
+#
+#
+#
+#
+#
+# line 1-10 for import
 ############################################################################################
 # SpyStreamHelper
 ############################################################################################
