@@ -30,7 +30,17 @@ def generate_python(path,*templates,one_file=True):
         f.write(head + template_string)
 
 def generate_sv(path,*templates,one_file=True):
-    head = 'import SpyLib::*;\n'
+    if one_file == True:
+        import os
+        content = []
+        with open('%s/SpyLib.sv' % os.path.dirname(__file__),'r') as f:
+            content.extend(f.readlines())
+        head = ''.join(content)
+        head += '\n'
+        head += 'import SpyLib::*;\n'
+    else:
+        head = '`include "SpyLib.sv"\n'
+        head += 'import SpyLib::*;\n'
     template_string = '\n\n\n'.join([template().sv_class() for template in templates])
     with open(path,'w') as f:
         f.write(head + template_string)

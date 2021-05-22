@@ -1,5 +1,5 @@
-from unitest.test_spy import SpyTest
+from unitest.test_spy import SpyIntTest, SpyTest
 
 if __name__ == '__main__':
-    Test = SpyTest()
+    Test = SpyIntTest()
     Test.test_base()

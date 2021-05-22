@@ -1,3 +1,4 @@
+`include "SpyLib.sv"
 import SpyLib::*;
 class SubDemo;
     int                 a;

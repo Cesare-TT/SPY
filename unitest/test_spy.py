@@ -2,7 +2,7 @@ from math import ceil
 import unittest
 import random
 import string
-import os
+import os,subprocess
 
 from Spy import SpyStreamHelper
 from Spy import SpyInst
@@ -81,7 +81,7 @@ class SpyTestBase(unittest.TestCase):
 class SpyTest(SpyTestBase):
     def pre_test(self):
         generate_python('SpyTest.py', SubDemo, Demo)
-        generate_sv('SpyTest.sv', SubDemo, Demo)
+        generate_sv('SpyTest.sv', SubDemo, Demo, one_file=False)
 
     def run_once(self, helper, sv_test, src):
         self.pre_test()
@@ -92,6 +92,8 @@ class SpyTest(SpyTestBase):
         for B in stream:
             f_stream.write('{:0>2x}\n'.format(B))
         f_stream.close()
+        subprocess.Popen('echo $0;echo $SHELL;echo $PATH;module list', shell=True, executable='/bin/zsh')
+        # source /usr/share/modules/init/bash;module list;module load vcs;
         os.system(f'make OPT=+{sv_test}')
         stream = b''
         f_stream = open('SpyStreamSv2Py', 'r')
