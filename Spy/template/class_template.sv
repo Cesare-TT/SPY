@@ -54,12 +54,8 @@ class {{ast.__class__.__name__}};
 
         Ostream = this.SerializeToOstream(0, this);
         foreach (Ostream[i]) begin
-            str_bytes.hextoa(Ostream[i]);
-            if (Ostream[i] < 8'h10) begin
-                Ostring = {Ostring, "0", str_bytes};
-            end else begin
-                Ostring = {Ostring, str_bytes};
-            end
+            str_bytes = string'(Ostream[i]);
+            Ostring = {Ostring, str_bytes};
         end
         return Ostring;
     endfunction
