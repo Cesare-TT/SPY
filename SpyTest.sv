@@ -40,6 +40,23 @@ class SubDemo;
             endcase
         end
     endfunction
+
+    function string SerializeToString();
+        string      Ostring;
+        SpyBytes    Ostream;
+        string      str_bytes;
+
+        Ostream = this.SerializeToOstream(0, this);
+        foreach (Ostream[i]) begin
+            str_bytes.hextoa(Ostream[i]);
+            if (Ostream[i] < 8'h10) begin
+                Ostring = {Ostring, "0", str_bytes, "\n"};
+            end else begin
+                Ostring = {Ostring, str_bytes, "\n"};
+            end
+        end
+        return Ostring;
+    endfunction
 endclass
 
 
@@ -102,5 +119,22 @@ class Demo;
                 24'h6:    SpyList#(real, SpyFloat)::ParseFromIstream(value.f, substream, substream_tag);
             endcase
         end
+    endfunction
+
+    function string SerializeToString();
+        string      Ostring;
+        SpyBytes    Ostream;
+        string      str_bytes;
+
+        Ostream = this.SerializeToOstream(0, this);
+        foreach (Ostream[i]) begin
+            str_bytes.hextoa(Ostream[i]);
+            if (Ostream[i] < 8'h10) begin
+                Ostring = {Ostring, "0", str_bytes, "\n"};
+            end else begin
+                Ostring = {Ostring, str_bytes, "\n"};
+            end
+        end
+        return Ostring;
     endfunction
 endclass

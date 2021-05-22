@@ -46,4 +46,21 @@ class {{ast.__class__.__name__}};
             endcase
         end
     endfunction
+
+    function string SerializeToString();
+        string      Ostring;
+        SpyBytes    Ostream;
+        string      str_bytes;
+
+        Ostream = this.SerializeToOstream(0, this);
+        foreach (Ostream[i]) begin
+            str_bytes.hextoa(Ostream[i]);
+            if (Ostream[i] < 8'h10) begin
+                Ostring = {Ostring, "0", str_bytes, "\n"};
+            end else begin
+                Ostring = {Ostring, str_bytes, "\n"};
+            end
+        end
+        return Ostring;
+    endfunction
 endclass
