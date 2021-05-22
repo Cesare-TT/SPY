@@ -56,9 +56,9 @@ class {{ast.__class__.__name__}};
         foreach (Ostream[i]) begin
             str_bytes.hextoa(Ostream[i]);
             if (Ostream[i] < 8'h10) begin
-                Ostring = {Ostring, "0", str_bytes, "\n"};
+                Ostring = {Ostring, "0", str_bytes};
             end else begin
-                Ostring = {Ostring, str_bytes, "\n"};
+                Ostring = {Ostring, str_bytes};
             end
         end
         return Ostring;
