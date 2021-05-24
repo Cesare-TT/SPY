@@ -180,13 +180,13 @@ class Data PROTOBUF_FINAL :
     kPayloadFieldNumber = 1,
     kControlFieldNumber = 2,
   };
-  // string payload = 1;
+  // bytes payload = 1;
   void clear_payload();
   const std::string& payload() const;
   void set_payload(const std::string& value);
   void set_payload(std::string&& value);
   void set_payload(const char* value);
-  void set_payload(const char* value, size_t size);
+  void set_payload(const void* value, size_t size);
   std::string* mutable_payload();
   std::string* release_payload();
   void set_allocated_payload(std::string* payload);
@@ -235,7 +235,7 @@ class Data PROTOBUF_FINAL :
 #endif  // __GNUC__
 // Data
 
-// string payload = 1;
+// bytes payload = 1;
 inline void Data::clear_payload() {
   payload_.ClearToEmpty();
 }
@@ -270,7 +270,7 @@ inline void Data::set_payload(const char* value) {
   payload_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
   // @@protoc_insertion_point(field_set_char:spy_pipe_pkg.Data.payload)
 }
-inline void Data::set_payload(const char* value,
+inline void Data::set_payload(const void* value,
     size_t size) {
   
   payload_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(

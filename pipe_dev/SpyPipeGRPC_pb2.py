@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x11SpyPipeGRPC.proto\x12\x0cspy_pipe_pkg\"(\n\x04\x44\x61ta\x12\x0f\n\x07payload\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontrol\x18\x02 \x01(\t2G\n\x0bSpyPipeGRPC\x12\x38\n\x08SendData\x12\x12.spy_pipe_pkg.Data\x1a\x12.spy_pipe_pkg.Data\"\x00(\x01\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\x11SpyPipeGRPC.proto\x12\x0cspy_pipe_pkg\"(\n\x04\x44\x61ta\x12\x0f\n\x07payload\x18\x01 \x01(\x0c\x12\x0f\n\x07\x63ontrol\x18\x02 \x01(\t2G\n\x0bSpyPipeGRPC\x12\x38\n\x08SendData\x12\x12.spy_pipe_pkg.Data\x1a\x12.spy_pipe_pkg.Data\"\x00(\x01\x30\x01\x62\x06proto3'
 )
 
 
@@ -35,8 +35,8 @@ _DATA = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='payload', full_name='spy_pipe_pkg.Data.payload', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),

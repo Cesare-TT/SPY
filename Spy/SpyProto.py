@@ -1,7 +1,7 @@
 from jinja2     import PackageLoader,Environment,FileSystemLoader
+from functools  import partial
 import builtins
 import os
-#
 #
 #
 #
@@ -57,6 +57,10 @@ class SpyProtoRoot(object):
             name = self.name
         return f'$display("{name}: {self.sv_format_symbol}", {name});'
 
+    @property
+    def _type(self):
+        return self.__class__
+
 ############################################################################################
 # SpyBits
 ############################################################################################
@@ -65,6 +69,12 @@ class SpyBits(SpyProtoRoot):
     def __init__(self,width,name,default=0):
         super().__init__(name,default)
         self._width = width
+
+    @property
+    def _type(self):
+        #print(partial(self.__class__,width=self._width))
+        return partial(self.__class__,width=self._width)
+
 
     @property
     def type_string(self):
@@ -95,6 +105,7 @@ class SpyBits(SpyProtoRoot):
         if name is None:
             name = self.name
         return f'$display("{name}: {self._width}\'h{self.sv_format_symbol}", {name});'
+
 
 
 ############################################################################################
@@ -203,7 +214,12 @@ class SpyList(SpyProtoRoot):
 
     def __init__(self,name,default=[SpyInt("")]):
         super().__init__(name,default)
-        self._type = default[0].__class__
+        #self._type = default[0]._type
+
+    @property
+    def _type(self):
+        return self._default[0]._type
+
 
     @property
     def type_string(self):
@@ -226,11 +242,11 @@ class SpyList(SpyProtoRoot):
 
     @property
     def sv_type_string(self):
-        return self._type("").sv_type_string
+        return self._type(name="").sv_type_string
 
     @property
     def sv_spy_type(self):
-        return f'SpyList#({self._type("").sv_type_string}, {self._type("").sv_spy_type})'
+        return f'SpyList#({self._type(name="").sv_type_string}, {self._type(name="").sv_spy_type})'
 
     @property
     def sv_var_declr(self):
@@ -239,13 +255,13 @@ class SpyList(SpyProtoRoot):
     def sv_report_string(self, name=None):
         if name is None:
             name = self.name
-        return f'foreach({name}[i]) $display("{self.name}[%0d]: {self._type("").sv_format_symbol}", i, {name}[i]);'
+        return f'foreach({name}[i]) $display("{self.name}[%0d]: {self._type(name="").sv_format_symbol}", i, {name}[i]);'
 
 class SpyDArray(SpyList):
 
     @property
     def default_value(self):
-        return 'SpyInst.SpyDArrayInst(SpyStreamHelper.%sStreamHelper,%s)' % (self._type("").type_string,','.join([str(x.default_value) for x in self._default]))
+        return 'SpyInst.SpyDArrayInst(SpyStreamHelper.%sStreamHelper,%s)' % (self._type(name="").type_string,','.join([str(x.default_value) for x in self._default]))
 
 
 

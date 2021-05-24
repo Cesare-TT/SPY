@@ -56,7 +56,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_SpyPipeGRPC_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\021SpyPipeGRPC.proto\022\014spy_pipe_pkg\"(\n\004Dat"
-  "a\022\017\n\007payload\030\001 \001(\t\022\017\n\007control\030\002 \001(\t2G\n\013S"
+  "a\022\017\n\007payload\030\001 \001(\014\022\017\n\007control\030\002 \001(\t2G\n\013S"
   "pyPipeGRPC\0228\n\010SendData\022\022.spy_pipe_pkg.Da"
   "ta\032\022.spy_pipe_pkg.Data\"\000(\0010\001b\006proto3"
   ;
@@ -156,12 +156,11 @@ const char* Data::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::inter
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // string payload = 1;
+      // bytes payload = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           auto str = _internal_mutable_payload();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "spy_pipe_pkg.Data.payload"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -202,13 +201,9 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string payload = 1;
+  // bytes payload = 1;
   if (this->payload().size() > 0) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_payload().data(), static_cast<int>(this->_internal_payload().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "spy_pipe_pkg.Data.payload");
-    target = stream->WriteStringMaybeAliased(
+    target = stream->WriteBytesMaybeAliased(
         1, this->_internal_payload(), target);
   }
 
@@ -238,10 +233,10 @@ size_t Data::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string payload = 1;
+  // bytes payload = 1;
   if (this->payload().size() > 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_payload());
   }
 

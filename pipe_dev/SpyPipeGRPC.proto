@@ -7,7 +7,7 @@ service SpyPipeGRPC {
 }
 
 message Data {
-    string payload = 1;
+    bytes  payload = 1;
     string control = 2;
 }
 

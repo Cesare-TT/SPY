@@ -59,7 +59,15 @@ sim:
 clean:
 	rm -f *.o *.pb.cc *.pb.h client
 
-
+release:
+	if [ -d ../pipe_py ]; then rm -r ../pipe_py; fi
+	mkdir ../pipe_py
+	cp SpyPipeServer.py 		../pipe_py/SpyPipeServer.py
+	cp SpyPipeGRPC_pb2.py		../pipe_py/SpyPipeGRPC_pb2.py
+	cp SpyPipeGRPC_pb2_grpc.py	../pipe_py/SpyPipeGRPC_pb2_grpc.py
+	if [ -d ../pipe_so ]; then rm -r ../pipe_so; fi
+	mkdir ../pipe_so
+	cp SpyPipeClient.so			../pipe_so/SpyPipeClient.so
 
 
 dbg_gen_code:
