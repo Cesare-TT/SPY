@@ -150,3 +150,5 @@ ucli*
 .vscode/launch.json
 pipe_py/*
 pipe_so/*
+example.py
+example.sv
